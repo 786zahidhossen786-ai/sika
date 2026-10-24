@@ -1,0 +1,6 @@
+{
+  "name": "Sika MaterialOps - Construction Materials ERP",
+  "description": "Minimalist, high-clarity multi-role management system for Sika construction materials distributors and contractors. Real-time inventory, invoices, deliveries, ledgers, and profit tracking.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
