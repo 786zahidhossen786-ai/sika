@@ -55,9 +55,11 @@ export default function App() {
   const [payments, setPayments] = useState<PaymentRecord[]>(initialPayments);
   const [expenses, setExpenses] = useState<ExpenseRecord[]>(initialExpenses);
 
-  // Modals
+  // Modals & UI Layout states
   const [isCreateInvoiceModalOpen, setIsCreateInvoiceModalOpen] = useState(false);
   const [printInvoice, setPrintInvoice] = useState<Invoice | null>(null);
+  const [isDesktopCollapsed, setIsDesktopCollapsed] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Update HTML document direction for RTL languages (Arabic / Urdu)
   useEffect(() => {
@@ -282,7 +284,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
-      {/* 3-Zone Clean Header */}
+      {/* 3-Zone Clean Header with Hamburger and Collapse Toggle */}
       <Header
         currentRole={currentRole}
         onRoleChange={setCurrentRole}
@@ -290,22 +292,31 @@ export default function App() {
         onLangChange={setCurrentLang}
         activeView={activeView}
         onNewInvoiceClick={() => setIsCreateInvoiceModalOpen(true)}
+        isMobileMenuOpen={isMobileMenuOpen}
+        onToggleMobileMenu={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        isDesktopCollapsed={isDesktopCollapsed}
+        onToggleDesktopCollapse={() => setIsDesktopCollapsed(!isDesktopCollapsed)}
       />
 
       {/* Main Container with Sidebar + Content */}
       <div className="flex-1 flex overflow-hidden">
-        {/* Navigation Sidebar */}
+        {/* Navigation Sidebar (Collapsible Desktop + Mobile Overlay Drawer) */}
         <Sidebar
           activeView={activeView}
           onViewChange={setActiveView}
           currentLang={currentLang}
           currentRole={currentRole}
+          onRoleChange={setCurrentRole}
           lowStockCount={lowStockCount}
           pendingDeliveryCount={pendingDeliveryCount}
+          isDesktopCollapsed={isDesktopCollapsed}
+          onToggleDesktopCollapse={() => setIsDesktopCollapsed(!isDesktopCollapsed)}
+          isMobileOpen={isMobileMenuOpen}
+          onCloseMobile={() => setIsMobileMenuOpen(false)}
         />
 
         {/* Dynamic Viewport View */}
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-slate-950">
+        <main className="flex-1 min-w-0 overflow-y-auto p-3.5 sm:p-6 lg:p-8 bg-slate-950">
           <div className="max-w-7xl mx-auto">
             {activeView === 'dashboard' && (
               <DashboardView

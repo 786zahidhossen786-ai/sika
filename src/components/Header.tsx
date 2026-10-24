@@ -2,12 +2,16 @@ import React from 'react';
 import { 
   Building2, 
   Globe, 
-  PlusCircle, 
+  Plus, 
   ShieldCheck, 
   Truck, 
   Package, 
   BadgePercent,
-  Check
+  Check,
+  Menu,
+  X,
+  PanelLeftClose,
+  PanelLeftOpen
 } from 'lucide-react';
 import { Language, UserRole } from '../types';
 import { translations, isRTL } from '../data/translations';
@@ -19,6 +23,10 @@ interface HeaderProps {
   onLangChange: (lang: Language) => void;
   activeView: string;
   onNewInvoiceClick: () => void;
+  isMobileMenuOpen: boolean;
+  onToggleMobileMenu: () => void;
+  isDesktopCollapsed: boolean;
+  onToggleDesktopCollapse: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -27,7 +35,11 @@ export const Header: React.FC<HeaderProps> = ({
   currentLang,
   onLangChange,
   activeView,
-  onNewInvoiceClick
+  onNewInvoiceClick,
+  isMobileMenuOpen,
+  onToggleMobileMenu,
+  isDesktopCollapsed,
+  onToggleDesktopCollapse
 }) => {
   const t = translations[currentLang];
   const rtl = isRTL(currentLang);
@@ -49,28 +61,53 @@ export const Header: React.FC<HeaderProps> = ({
   ];
 
   return (
-    <header className="h-16 border-b border-slate-800 bg-slate-900/90 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between gap-4 sticky top-0 z-30">
-      {/* Zone 1: Brand Wordmark */}
-      <div className="flex items-center gap-3 shrink-0">
+    <header className="h-16 border-b border-slate-800 bg-slate-900/95 backdrop-blur-md px-3 sm:px-6 flex items-center justify-between gap-2 sm:gap-4 sticky top-0 z-30 select-none">
+      {/* Zone 1: Mobile Hamburger + Brand Wordmark + Desktop Collapse Toggle */}
+      <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+        {/* Mobile menu trigger */}
+        <button
+          onClick={onToggleMobileMenu}
+          aria-label="Toggle navigation menu"
+          className="md:hidden p-2 text-slate-300 hover:text-amber-400 hover:bg-slate-800 rounded-lg transition-colors focus:outline-none"
+        >
+          {isMobileMenuOpen ? (
+            <X className="w-5 h-5 text-amber-400" />
+          ) : (
+            <Menu className="w-5 h-5" />
+          )}
+        </button>
+
+        {/* Desktop Sidebar Collapse Toggle */}
+        <button
+          onClick={onToggleDesktopCollapse}
+          title={isDesktopCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+          className="hidden md:flex p-1.5 text-slate-400 hover:text-amber-400 hover:bg-slate-800/80 rounded-lg transition-colors"
+        >
+          {isDesktopCollapsed ? (
+            <PanelLeftOpen className="w-4 h-4 text-amber-400" />
+          ) : (
+            <PanelLeftClose className="w-4 h-4" />
+          )}
+        </button>
+
+        {/* Sika Emblem & Title */}
         <div className="flex items-center gap-2">
-          {/* Sika triangle styled emblem */}
-          <div className="w-9 h-9 bg-gradient-to-br from-amber-500 to-amber-600 rounded-lg flex items-center justify-center shadow-md shadow-amber-500/20 text-slate-950 font-black tracking-tighter text-sm">
+          <div className="w-8 h-8 sm:w-9 sm:h-9 bg-gradient-to-br from-amber-500 to-amber-600 rounded-lg flex items-center justify-center shadow-md shadow-amber-500/20 text-slate-950 font-black tracking-tighter text-xs sm:text-sm shrink-0">
             SIKA
           </div>
           <div className="leading-tight">
-            <span className="text-base font-bold text-slate-100 tracking-tight block">
+            <span className="text-sm sm:text-base font-bold text-slate-100 tracking-tight block">
               MaterialOps
             </span>
-            <span className="text-[11px] text-amber-400/90 font-medium block">
+            <span className="text-[10px] sm:text-[11px] text-amber-400/90 font-medium hidden sm:block">
               Sika Construction Materials
             </span>
           </div>
         </div>
       </div>
 
-      {/* Zone 2: Contextual Role & Operational Mode */}
+      {/* Zone 2: Contextual Role Selector (Desktop) */}
       <div className="hidden lg:flex items-center gap-4">
-        {/* Role Selector */}
         <div className="flex items-center gap-1 bg-slate-950/70 p-1 rounded-lg border border-slate-800">
           <span className="text-[11px] uppercase font-semibold tracking-wider text-slate-400 px-2">
             Role:
@@ -96,12 +133,12 @@ export const Header: React.FC<HeaderProps> = ({
       </div>
 
       {/* Zone 3: Language Selector & Primary Action */}
-      <div className="flex items-center gap-3 shrink-0">
+      <div className="flex items-center gap-2 sm:gap-3 shrink-0">
         {/* Language selector */}
         <div className="relative group">
-          <button className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-slate-300 bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 rounded-lg transition-colors">
-            <Globe className="w-3.5 h-3.5 text-amber-400" />
-            <span className="uppercase font-semibold tracking-wider">{currentLang}</span>
+          <button className="flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 text-xs font-medium text-slate-300 bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 rounded-lg transition-colors">
+            <Globe className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+            <span className="uppercase font-semibold tracking-wider text-[11px] sm:text-xs">{currentLang}</span>
           </button>
           
           <div className={`absolute top-full mt-1.5 ${rtl ? 'left-0' : 'right-0'} w-44 bg-slate-900 border border-slate-800 rounded-lg shadow-xl shadow-slate-950/50 py-1 hidden group-hover:block z-50`}>
@@ -125,10 +162,11 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Primary Action Button: Create Sales Invoice */}
         <button
           onClick={onNewInvoiceClick}
-          className="flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-slate-950 bg-amber-500 hover:bg-amber-400 active:scale-[0.98] rounded-lg shadow-sm shadow-amber-500/20 transition-all whitespace-nowrap"
+          className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-xs font-semibold text-slate-950 bg-amber-500 hover:bg-amber-400 active:scale-[0.98] rounded-lg shadow-sm shadow-amber-500/20 transition-all whitespace-nowrap"
         >
-          <PlusCircle className="w-4 h-4 text-slate-950" />
-          <span>{t.newInvoice}</span>
+          <Plus className="w-4 h-4 text-slate-950 shrink-0" />
+          <span className="hidden sm:inline">{t.newInvoice}</span>
+          <span className="sm:hidden font-bold">Invoice</span>
         </button>
       </div>
     </header>
