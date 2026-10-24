@@ -10,6 +10,13 @@ import {
   ExpenseRecord
 } from '../types';
 
+import sikaSealantImg from '../assets/images/sika_sealant_cartridge_1792853146716.jpg';
+import sikaMortarImg from '../assets/images/sika_mortar_pail_1792853146876.jpg';
+import sikaWarehouseImg from '../assets/images/sika_warehouse_depot_1792853147575.jpg';
+import avatarDirectorImg from '../assets/images/avatar_operations_director_1792853147363.jpg';
+
+export { sikaSealantImg, sikaMortarImg, sikaWarehouseImg, avatarDirectorImg };
+
 export const initialProducts: Product[] = [
   {
     id: 'prod-101',
@@ -24,7 +31,7 @@ export const initialProducts: Product[] = [
     currentStock: 480,
     reorderLevel: 100,
     maxDiscountPercent: 15,
-    image: '/src/assets/images/sika_sealant_cartridge_1792853146716.jpg',
+    image: sikaSealantImg,
     description: '1-component elastic polyurethane adhesive and multi-purpose joint sealant for interior and exterior sealing.',
     shelfLifeMonths: 15,
     locationRack: 'A1-04-B',
@@ -43,7 +50,7 @@ export const initialProducts: Product[] = [
     currentStock: 185,
     reorderLevel: 50,
     maxDiscountPercent: 12,
-    image: '/src/assets/images/sika_mortar_pail_1792853146876.jpg',
+    image: sikaMortarImg,
     description: 'Two-part polymer modified cementitious waterproof slurry mortar for concrete structures, basements, water tanks, and reservoirs.',
     shelfLifeMonths: 12,
     locationRack: 'B2-01-A',
@@ -62,7 +69,7 @@ export const initialProducts: Product[] = [
     currentStock: 64,
     reorderLevel: 30,
     maxDiscountPercent: 10,
-    image: '/src/assets/images/sika_mortar_pail_1792853146876.jpg',
+    image: sikaMortarImg,
     description: 'Synthetic rubber emulsion for bonding slurries and high-strength polymer-modified repair mortars.',
     shelfLifeMonths: 18,
     locationRack: 'C1-03-A',
@@ -81,7 +88,7 @@ export const initialProducts: Product[] = [
     currentStock: 18, // LOW STOCK
     reorderLevel: 40,
     maxDiscountPercent: 8,
-    image: '/src/assets/images/sika_sealant_cartridge_1792853146716.jpg',
+    image: sikaSealantImg,
     description: 'Fast-curing, 2-component methacrylate anchoring adhesive for threaded rods and reinforcing rebar in concrete.',
     shelfLifeMonths: 12,
     locationRack: 'A2-02-C',
